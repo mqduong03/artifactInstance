@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    HOME: /root
+
+phases:
+  install:
+    commands:
+      - echo "Checking Operating System"
+      - cat /etc/os-release
+      - uname -a
+      
+  pre_build:
+    commands:
+      - echo "Installing Composer"
+      - curl -sS https://getcomposer.org/installer | php
+      - mv composer.phar /usr/local/bin/composer
+      - chmod +x /usr/local/bin/composer
+      
+  build:
+    commands:
+      - echo "Installing dependencies"
+      - php --version
+      - composer install --no-dev --optimize-autoloader
+
+artifacts:
+  files:
+    - '**/*'

@@ -1,0 +1,12 @@
+{
+    "name": "my-company/my-project",
+    "description": "Simple PHP 8.1 project",
+    "type": "project",
+    "require": {
+        "php": "~8.1.0",
+        "monolog/monolog": "^2.0"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
