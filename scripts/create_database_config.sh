@@ -1,7 +1,10 @@
 #!/bin/bash
 cd /var/www/html
 
-yum install -y php-pdo php-mysqlnd
+yum install -y php-pdo php-mysqlnd mysql
+
+# Create MySQL user that allows connections from any host
+mysql -h artifactinstance-db.c2tme8q64742.us-east-1.rds.amazonaws.com -u admin -pMySecurePassword123 -e "CREATE USER IF NOT EXISTS 'appuser'@'%' IDENTIFIED BY 'AppPassword123'; GRANT ALL PRIVILEGES ON *.* TO 'appuser'@'%'; FLUSH PRIVILEGES;"
 
 mkdir -p app/etc
 cat << 'EOL' > app/etc/env.php
@@ -12,8 +15,8 @@ return [
             'default' => [
                 'host' => 'artifactinstance-db.c2tme8q64742.us-east-1.rds.amazonaws.com',
                 'dbname' => 'mysql',
-                'username' => 'admin',
-                'password' => 'MySecurePassword123'
+                'username' => 'appuser',
+                'password' => 'AppPassword123'
             ]
         ]
     ]
