@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-// Simple Magento simulator that connects to database
+// Real Magento CLI simulator
 
 if ($argc < 2) {
     echo "Usage: bin/magento <command>\n";
@@ -17,7 +17,7 @@ if (!file_exists('app/etc/env.php')) {
 
 $config = include 'app/etc/env.php';
 
-// Connect to database (this will fail from CodeBuild)
+// Connect to database
 try {
     $pdo = new PDO(
         'mysql:host=' . $config['db']['connection']['default']['host'] . ';dbname=' . $config['db']['connection']['default']['dbname'],
@@ -26,7 +26,7 @@ try {
     );
     echo "Database connection successful for command: $command\n";
 } catch (PDOException $e) {
-    echo "SQLSTATE[HY000] [1130] Host '" . gethostname() . "' is not allowed to connect to this MySQL server\n";
+    echo "Database connection failed: " . $e->getMessage() . "\n";
     exit(1);
 }
 
