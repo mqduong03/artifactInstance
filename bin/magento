@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+<?php
+// Simple Magento simulator that connects to database
+
+if ($argc < 2) {
+    echo "Usage: bin/magento <command>\n";
+    exit(1);
+}
+
+$command = $argv[1];
+
+// Load database config
+if (!file_exists('app/etc/env.php')) {
+    echo "Error: app/etc/env.php not found\n";
+    exit(1);
+}
+
+$config = include 'app/etc/env.php';
+
+// Connect to database (this will fail from CodeBuild)
+try {
+    $pdo = new PDO(
+        'mysql:host=' . $config['db']['connection']['default']['host'] . ';dbname=' . $config['db']['connection']['default']['dbname'],
+        $config['db']['connection']['default']['username'],
+        $config['db']['connection']['default']['password']
+    );
+    echo "Database connection successful for command: $command\n";
+} catch (PDOException $e) {
+    echo "SQLSTATE[HY000] [1130] Host '" . gethostname() . "' is not allowed to connect to this MySQL server\n";
+    exit(1);
+}
+
+echo "Command '$command' completed successfully\n";
+?>
